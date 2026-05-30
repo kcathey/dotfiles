@@ -12,30 +12,37 @@ then
   source ~/.localrc
 fi
 
-# all of our zsh files
-typeset -U config_files
+# all of our bash files
+shopt -s globstar 2>/dev/null
 config_files=($BASH/**/*.bash)
 
 # load the path files
-for file in ${(M)config_files:#*/path.bash}
-do
-  source $file
+for file in "${config_files[@]}"; do
+  [[ "$file" == */path.bash ]] && source "$file"
 done
 
 # load everything but the path and completion files
-for file in ${${config_files:#*/path.bash}:#*/completion.bash:#themes/*:#git-template/*:#*/*.bash.orig}
-do
-  source $file
+for file in "${config_files[@]}"; do
+  [[ "$file" == */path.bash ]] && continue
+  [[ "$file" == */completion.bash ]] && continue
+  [[ "$file" == */themes/* ]] && continue
+  [[ "$file" == */git-template/* ]] && continue
+  [[ "$file" == *.bash.orig ]] && continue
+  source "$file"
 done
 
-# initialize autocomplete here, otherwise functions won't be loaded
-autoload -U compinit
-compinit
+# initialize bash completion
+if [[ -f /etc/bash_completion ]]; then
+  source /etc/bash_completion
+elif [[ -f /usr/local/etc/bash_completion ]]; then
+  source /usr/local/etc/bash_completion
+elif type brew &>/dev/null && [[ -f "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]]; then
+  source "$(brew --prefix)/etc/profile.d/bash_completion.sh"
+fi
 
 # load every completion after autocomplete loads
-#for file in ${(M)config_files:#*/completion.bash}
-#do
-#  source $file
+#for file in "${config_files[@]}"; do
+#  [[ "$file" == */completion.bash ]] && source "$file"
 #done
 
 unset config_files

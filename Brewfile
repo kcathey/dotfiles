@@ -11,6 +11,7 @@ brew 'poetry'
 brew 'pre-commit'
 brew 'tmux'
 brew 'pipenv'
+brew 'yarn'
 
 cask '1password-cli'
 cask 'xquartz'
