@@ -1,6 +1,8 @@
 alias reload!='. ~/.bashrc'
 
-alias cls='clear' # Good 'ol Clear Screen command
+alias angband='/opt/homebrew/bin/angband -v -g -n -mgtk -- -n8 &'
+alias matrix='xterm -title matrix -name matrix -e cmatrix -fab &'
+alias psjava='ps -ax | grep java | more'
 
 if [ "$(uname -s)" == "Darwin" ]
 then

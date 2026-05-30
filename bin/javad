@@ -1,0 +1,6 @@
+#!/bin/bash
+#find $1 -name *.class > classfiles
+#find $1 -name *.class -exec jad -t -r -f -o -d $1 -s java {} \;
+#find $1 -name *.class -exec rm -r {} \;
+#find $1 -name *\$* -exec rm -r {} \;
+jd -ff -lnc -s java -safe -t -r -d $1-src $1/**/*.class

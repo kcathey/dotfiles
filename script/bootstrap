@@ -170,6 +170,8 @@ else
   success "agnoster-mine theme installed"
 fi
 
+xrdb -merge ~/.Xdefaults
+
 
 echo ''
 echo '  All installed!'

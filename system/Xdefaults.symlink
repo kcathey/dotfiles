@@ -1,0 +1,9 @@
+XTerm*scrollBar: True
+XTerm*rightScrollBar: True
+XTerm*reverseVideo: True
+XTerm*rightbar: True
+XTerm*loginShell: True
+XTerm*colorBDModel: False
+XTerm*saveLines: 200
+XTerm*color4: RoyalBlue
+XTerm*color12: RoyalBlue
