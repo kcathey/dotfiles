@@ -1,4 +1,4 @@
- #Copy Root Filesystem (now with more parallel!)
+# Copy Root Filesystem (now with more parallel!)
 function pcopy() {
 	if [[ -d $1 ]]; then
 		THREADS="24"
@@ -6,6 +6,6 @@ function pcopy() {
 		cd $1; find . -type f -print0 | xargs -0 -n1 -P$THREADS -I% rsync -aqz --no-motd % $2/% 1>&3 2>&3
 		rsync -HAXcqa --no-motd $1 $2 1>&3 2>&3 || return 1;
 	else
-		 rsync -HAXcqa --no-motd $1 $2 1>&3 2>&3 || return 1;
+		rsync -HAXcqa --no-motd $1 $2 1>&3 2>&3 || return 1;
 	fi
 }

@@ -14,7 +14,7 @@ fi
 
 # all of our bash files
 shopt -s globstar 2>/dev/null
-config_files=($BSH/**/*.bash)
+config_files=($BSH/**/*.bash $BSH/functions/*)
 
 # load the path files
 for file in "${config_files[@]}"; do
@@ -27,18 +27,18 @@ for file in "${config_files[@]}"; do
   [[ "$file" == */completion.bash ]] && continue
   [[ "$file" == */themes/* ]] && continue
   [[ "$file" == */git-template/* ]] && continue
-  [[ "$file" == *.bash.orig ]] && continue
+  [[ "$file" == */*.bash.orig ]] && continue
   source "$file"
 done
 
 # initialize bash completion
-if [[ -f /etc/bash_completion ]]; then
-  source /etc/bash_completion
-elif [[ -f /usr/local/etc/bash_completion ]]; then
-  source /usr/local/etc/bash_completion
-elif type brew &>/dev/null && [[ -f "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]]; then
-  source "$(brew --prefix)/etc/profile.d/bash_completion.sh"
-fi
+#if [[ -f /etc/bash_completion ]]; then
+#  source /etc/bash_completion
+#elif [[ -f /usr/local/etc/bash_completion ]]; then
+#  source /usr/local/etc/bash_completion
+#elif type brew &>/dev/null && [[ -f "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]]; then
+#  source "$(brew --prefix)/etc/profile.d/bash_completion.sh"
+#fi
 
 # load every completion after autocomplete loads
 #for file in "${config_files[@]}"; do
@@ -163,6 +163,8 @@ plugins=(
 )
 
 source $OSH/oh-my-bash.sh
+
+unalias c 2>/dev/null  # oh-my-bash general aliases maps c=clear; we use c() to jump to projects
 
 # User configuration
 

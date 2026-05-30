@@ -1,5 +1,12 @@
-#compdef c
-_files -W $PROJECTS -/
-_files -W $GOPATH/src/github.com -/
+_c() {
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+
+    COMPREPLY=( $(compgen -d -- "$PROJECTS/$cur" | sed "s|$PROJECTS/||") )
+    if [[ -d "$GOPATH/src/github.com" ]]; then
+        COMPREPLY+=( $(compgen -d -- "$GOPATH/src/github.com/$cur" | sed "s|$GOPATH/src/github.com/||") )
+    fi
+}
+
+complete -F _c c
 
 # See further documentation in `functions/c`.

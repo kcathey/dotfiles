@@ -1,29 +1,22 @@
-#compdef boom
+_boom() {
+    local cur prev
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[1]}"
 
-local state line cmds ret=1
+    if [[ $COMP_CWORD -eq 1 ]]; then
+        local lists
+        lists=$(boom 2>/dev/null | awk '{print $1}')
+        COMPREPLY=( $(compgen -W "all edit help $lists" -- "$cur") )
+    else
+        case "$prev" in
+            boom|all|edit|help) ;;
+            *)
+                local items
+                items=$(boom "$prev" 2>/dev/null | awk '{print $1}' | sed 's/://')
+                COMPREPLY=( $(compgen -W "$items" -- "$cur") )
+                ;;
+        esac
+    fi
+}
 
-_arguments -C '1: :->cmds' '*: :->args'
-
-case $state in
-  cmds)
-    local -a cmds
-    cmds=(
-      'all:show all items in all lists'
-      'edit:edit the boom JSON file in $EDITOR'
-      'help:help text'
-    )
-    _describe -t commands 'boom command' cmds && ret=0
-    _values 'lists' $(boom | awk '{print $1}')
-    ;;
-  args)
-    case $line[1] in
-      (boom|all|edit|help)
-        ;;
-      *)
-        _values 'items' `boom $line[1] | awk '{print $1}' | sed -e 's/://'` 2>/dev/null && ret=0
-        ;;
-    esac
-    ;;
-esac
-
-return ret
+complete -F _boom boom
