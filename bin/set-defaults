@@ -1,5 +1,5 @@
 #!/bin/sh
 #
-# Sets macOS defaults by running $BASH/macos/set-defaults.sh.
+# Sets macOS defaults by running $BSH/macos/set-defaults.sh.
 
-exec $BASH/macos/set-defaults.sh
+exec $BSH/macos/set-defaults.sh

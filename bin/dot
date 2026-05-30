@@ -42,16 +42,16 @@ export BASH=$HOME/.dotfiles
 
 # Update dotfiles themselves
 echo "› git pull"
-git -C $BASH pull
+git -C $BSH pull
 
 # Set macOS defaults
-$BASH/macos/set-defaults.sh
+$BSH/macos/set-defaults.sh
 
 # Set macOS hostname
-$BASH/macos/set-hostname.sh
+$BSH/macos/set-hostname.sh
 
 # Install homebrew
-$BASH/homebrew/install.sh 2>&1
+$BSH/homebrew/install.sh 2>&1
 
 # Upgrade homebrew
 echo "› brew update"
@@ -62,4 +62,4 @@ brew upgrade
 
 # Install software
 echo "› script/install"
-$BASH/script/install
+$BSH/script/install

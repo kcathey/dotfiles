@@ -1,4 +1,4 @@
-# shortcut to this dotfiles path is $BASH
+# shortcut to this dotfiles path is $BSH
 export BASH=$HOME/.dotfiles
 
 # your project folder that we can `c [tab]` to
@@ -14,7 +14,7 @@ fi
 
 # all of our bash files
 shopt -s globstar 2>/dev/null
-config_files=($BASH/**/*.bash)
+config_files=($BSH/**/*.bash)
 
 # load the path files
 for file in "${config_files[@]}"; do
