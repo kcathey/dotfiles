@@ -2,15 +2,15 @@
 #
 # Type:
 #
-#   c <tab>
+#   w <tab>
 #
 # ...to autocomplete on all of your projects in the directories specified in
-# `functions/_c`. Typically I'm using it like:
+# `functions/_w`. Typically I'm using it like:
 #
-#    c holm<tab>/bo<tab>
+#    w holm<tab>/bo<tab>
 #
 # ...to quickly jump into holman/boom, for example.
 
-c() {
+w() {
     cd "$PROJECTS/$1"
 }

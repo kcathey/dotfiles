@@ -164,7 +164,7 @@ plugins=(
 
 source $OSH/oh-my-bash.sh
 
-unalias c 2>/dev/null  # oh-my-bash general aliases maps c=clear; we use c() to jump to projects
+unalias gf 2>/dev/null  # oh-my-bash git plugin maps gf=git fetch; we use gf() to fetch a remote branch locally
 
 # User configuration
 

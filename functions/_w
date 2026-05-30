@@ -1,4 +1,4 @@
-_c() {
+_w() {
     local cur="${COMP_WORDS[COMP_CWORD]}"
 
     COMPREPLY=( $(compgen -d -- "$PROJECTS/$cur" | sed "s|$PROJECTS/||") )
@@ -7,6 +7,6 @@ _c() {
     fi
 }
 
-complete -F _c c
+complete -F _w w
 
-# See further documentation in `functions/c`.
+# See further documentation in `functions/w`.

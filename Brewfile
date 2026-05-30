@@ -16,6 +16,7 @@ brew 'node'
 brew 'nvm'
 brew 'go'
 brew 'goenv'
+brew 'git-lfs'
 
 cask '1password-cli'
 cask 'xquartz'
