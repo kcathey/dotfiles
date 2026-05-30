@@ -1,0 +1,74 @@
+#set -g mouse-select-window on
+#set -g mode-mouse on 
+set -g mouse on
+#set -g mouse-select-pane on
+#set -g mouse-resize-pane on
+set -g default-terminal "tmux-256color"
+set -ag terminal-overrides ",xterm*:Tc:smcup@:rmcup@"
+set -ag terminal-overrides ",*256col*:Tc"
+set -g history-limit 50000
+
+setw -g automatic-rename
+setw -g xterm-keys on
+setw -g aggressive-resize on
+
+# Various colors.
+#set -g status-style fg=colour244
+set -g status-bg colour30
+set -g window-status-current-style fg=colour3
+#set -g window-status-current-fg colour3
+set -g pane-border-style fg=colour12
+set -g pane-active-border-style fg=colour51
+#set -g pane-active-border-fg colour51
+#set -g pane-border-fg colour12
+
+set -g status-left ''
+set -g status-left-length 0
+set -g status-right ''
+set -g status-right-length 0
+
+# Display a clock on the bottom right of the status bar.
+set -g status-right '%a %Y-%m-%d %H:%M:%S'
+set -g status-right-length 25
+#set -g status-right-fg colour88
+set -g status-right-style fg=colour88
+set -g clock-mode-style 12
+
+bind -n M-Down select-pane -D
+bind -n M-Up select-pane -U
+bind -n M-Left select-pane -L
+bind -n M-Right select-pane -R
+bind r source-file ~/.tmux.conf
+
+
+# Vi key bindings
+setw -g mode-keys vi
+set -g status-keys vi
+
+
+# Vi-style copy mode
+bind -T copy-mode-vi v send-keys -X begin-selection
+bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "pbcopy"
+
+# Reload config
+bind r source-file ~/.tmux.conf \; display "Config reloaded"
+
+# Clear screen and scrollback (triggered by Ghostty Cmd+K)
+bind K send-keys -R \; clear-history
+
+# Auto-enter copy-mode when scrolling up (critical for WSL compatibility)
+# This handles: 1) apps with mouse support, 2) already in copy-mode, 3) normal pane
+bind-key -n WheelUpPane if-shell -F -t = "#{mouse_any_flag}" "send-keys -M" "if -Ft= '#{pane_in_mode}' 'send-keys -M' 'copy-mode -e'"
+
+# Scroll bindings in copy-mode (both vi and emacs modes)
+bind-key -T copy-mode-vi WheelUpPane send-keys -X scroll-up
+bind-key -T copy-mode-vi WheelDownPane send-keys -X scroll-down
+bind-key -T copy-mode WheelUpPane send-keys -X scroll-up
+bind-key -T copy-mode WheelDownPane send-keys -X scroll-down
+
+# Clipboard integration (drag-to-copy)
+bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X stop-selection
+bind-key -T copy-mode MouseDragEnd1Pane send-keys -X stop-selection
+bind-key -T copy-mode-vi DoubleClick1Pane select-pane \; send-keys -X select-word
+bind-key -T copy-mode DoubleClick1Pane select-pane \; send-keys -X select-word
+bind-key -n DoubleClick1Pane select-pane -t = \; copy-mode \; send-keys -X select-word
