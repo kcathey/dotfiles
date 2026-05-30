@@ -152,5 +152,24 @@ then
   fi
 fi
 
+if [ -d "${HOME}/.oh-my-bash" ]
+then
+  success "oh-my-bash installed"
+else
+  info "installing oh-my-bash"
+  git clone https://github.com/ohmybash/oh-my-bash.git ${HOME}/.oh-my-bash
+  success "oh-my-bash installed"
+fi
+
+if [ -d "${HOME}/.oh-my-bash/custom/themes/agnoster-mine" ]
+then
+  success "agnoster-mine theme installed"
+else
+  info "installing agnoster-mine theme"
+  cp -r themes/agnoster-mine ${HOME}/.oh-my-bash/custom/themes/
+  success "agnoster-mine theme installed"
+fi
+
+
 echo ''
 echo '  All installed!'
