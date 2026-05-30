@@ -1,42 +1,66 @@
 # Local/private config goes in the include
 [include]
         path = ~/.gitconfig.local
-[hub]
-        protocol = https
-[alias]
-        co = checkout
-        promote = !$ZSH/bin/git-promote
-        wtf     = !$ZSH/bin/git-wtf
-        rank-contributors = !$ZSH/bin/git-rank-contributors
-        count   = !git shortlog -sn
-[color]
-        diff = auto
-        status = auto
-        branch = auto
-        ui = true
 [core]
-        excludesfile = ~/.gitignore
-        editor = vim
-[apply]
-        whitespace = nowarn
-[mergetool]
-        keepBackup = false
-[difftool]
-        prompt = false
-[help]
-        autocorrect = 1
-[push]
-        # See `git help config` (search for push.default)
-        # for more information on different options of the below setting.
-        #
-        # Setting to git 2.0 default to suppress warning message
-        default = simple
-[credential]
-	helper = osxkeychain
-[diff "spaceman-diff"]
-  command = /opt/homebrew/bin/spaceman-diff
+	excludesfile = ~/.gitignore_global
+	editor = vim
+	autocrlf = input
+	preloadIndex = true
+[http]
+	sslVerify = true
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	unstage = 'reset HEAD --'
+	last = 'log -1 HEAD'
+	visual = 'gui'
+	rb = 'reset --soft HEAD~1'
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	root = rev-parse --show-toplevel
+	prune-local = !git fetch --prune && git branch -vv | awk \"/: gone]/{print \\$1}\" | xargs -r git branch -D
+	install-precommit-hooks = "!f() {   # Ensure we are in a git repo   repo_root=\"$(git rev-parse --show-toplevel 2>/dev/null)\" || {     echo 'Not in a git repository' >&2;     return 1;   };   template_hooks='/Users/athey1/.git-template/hooks';   if [ ! -d \"$template_hooks\" ]; then     echo \"Template hooks directory not found: $template_hooks\" >&2;     echo 'Have you run your setup script?' >&2;     return 1;   fi;   hooks_dir=\"$repo_root/.git/hooks\";   mkdir -p \"$hooks_dir\";   for hook in post-checkout post-merge; do     src=\"$template_hooks/$hook\";     dest=\"$hooks_dir/$hook\";     if [ ! -f \"$src\" ]; then       echo \"Template hook missing: $src (skipping $hook)\" >&2;       continue;     fi;     if [ -f \"$dest\" ]; then       echo \"Hook already exists, not overwriting: $dest\";     else       cp \"$src\" \"$dest\";       chmod +x \"$dest\";       echo \"Installed hook: $dest\";     fi;   done;   # Optional: immediately run pre-commit install for this repo if available   if command -v pre-commit >/dev/null 2>&1 && [ -f \"$repo_root/.pre-commit-config.yaml\" ]; then     echo 'Running pre-commit install for this repo...';     ( cd \"$repo_root\" && pre-commit install ) || echo 'pre-commit install failed (non fatal)';   else     echo 'pre-commit not available or no .pre-commit-config.yaml; skipping pre-commit install.';   fi; }; f"
 
-[init]
-	defaultBranch = main
+
+[commit]
+	template = ~/.stCommitMsg
+	gpgsign = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[apply]
+	whitespace = nowarn
+[color]
+	branch = auto
+	diff = auto
+	status = auto
+	ui = true
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
 [pull]
 	rebase = true
+[init]
+	defaultBranch = main
+	templateDir = ~/.dotfiles/git-template
+[help]
+	autocorrect = 1
+[push]
+	autoSetupRemote = true
+	default = simple
+
+[credential]
+	helper = osxkeychain

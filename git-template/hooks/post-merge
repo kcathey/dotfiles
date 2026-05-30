@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# This hook is copied into each repo's .git/hooks/post-merge
+# It runs after merges (including many pulls) and installs pre-commit hooks if applicable.
+
+find_git_root() {
+  local dir="$PWD"
+  while [[ "$dir" != "/" ]]; do
+    if [[ -d "$dir/.git" ]]; then
+      printf '%s\n' "$dir"
+      return 0
+    fi
+    dir="$(dirname "$dir")"
+  done
+  return 1
+}
+
+main() {
+  if ! command -v pre-commit >/dev/null 2>&1; then
+    exit 0
+  fi
+
+  local repo_root
+  if ! repo_root="$(find_git_root)"; then
+    exit 0
+  fi
+
+  if [[ ! -f "$repo_root/.pre-commit-config.yaml" ]]; then
+    exit 0
+  fi
+
+  (
+    cd "$repo_root"
+    pre-commit install >/dev/null 2>&1 || true
+  )
+}
+
+main "$@"

@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# This hook is copied into each repo's .git/hooks/post-checkout
+# It runs on each checkout and installs pre-commit hooks if applicable.
+
+find_git_root() {
+  local dir="$PWD"
+  while [[ "$dir" != "/" ]]; do
+    if [[ -d "$dir/.git" ]]; then
+      printf '%s\n' "$dir"
+      return 0
+    fi
+    dir="$(dirname "$dir")"
+  done
+  return 1
+}
+
+main() {
+  # If pre-commit is not installed, do nothing
+  if ! command -v pre-commit >/dev/null 2>&1; then
+    exit 0
+  fi
+
+  local repo_root
+  if ! repo_root="$(find_git_root)"; then
+    # Not in a regular repo
+    exit 0
+  fi
+
+  # Only repos that actually use pre-commit
+  if [[ ! -f "$repo_root/.pre-commit-config.yaml" ]]; then
+    exit 0
+  fi
+
+  # Install or refresh pre-commit hooks for this repo
+  (
+    cd "$repo_root"
+    pre-commit install >/dev/null 2>&1 || true
+  )
+}
+
+main "$@"
